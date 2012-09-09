@@ -2,3 +2,5 @@
 *.pyc
 #*
 .coverage
+env/
+cover/
