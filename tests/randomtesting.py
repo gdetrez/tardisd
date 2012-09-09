@@ -1,11 +1,11 @@
+import os, sys
+sys.path.append(".")
 from tardisd.backup import Backup, BackupChain
-
 import random
 import unittest
 import datetime
 import tempfile
 import shutil
-import os, sys
 import string
 from time import sleep
 from subprocess import Popen, PIPE
