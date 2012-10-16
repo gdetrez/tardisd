@@ -181,15 +181,3 @@ class DeleteFileTestCase(unittest.TestCase):
 
 if __name__ == '__main__':
     unittest.main()
-
-
-# if __name__ == "__main__":
-#    tmp_backup_location = tempfile.mkdtemp()
-#     try:
-#         # Overriding the backup location for test purposes
-#         BKP_LOCATION = tmp_backup_location
-#         for i in range(1000):
-#             test_Backup()
-#         test_incremental_backups(1)
-#     finally:
-#         shutil.rmtree(tmp_backup_location)

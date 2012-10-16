@@ -214,6 +214,22 @@ class TestBackup(unittest.TestCase):
             raise
 
 
+
+class RandomTest(unittest.BaseTestSuite):
+    """A simple test that run tests n times with a different seed each time"""
+    def __init__(self, tests=(), niter=10):
+        self._niter = niter
+        super(RandomTest, self).__init__(tests)
+
+    def run(self, result):
+        for test in self:
+            for i in range(self._niter):
+                if result.shouldStop:
+                    break
+                test(result)
+        return result
+
+
 if __name__ == '__main__':
 
     logging.basicConfig(level=logging.WARN)
@@ -221,16 +237,6 @@ if __name__ == '__main__':
     SEED = int(os.environ.get('SEED', random.randint(0, sys.maxint)))
     random.seed(SEED)
     print "SEED:", SEED
-    unittest.main()
-
-
-if __name__ == "__main__":
-    tmp_backup_location = tempfile.mkdtemp()
-    try:
-        # Overriding the backup location for test purposes
-        tardis.BKP_LOCATION = tmp_backup_location
-        for i in range(1000):
-            test_Backup()
-        test_incremental_backups(1)
-    finally:
-        shutil.rmtree(tmp_backup_location)
+    test_suite = unittest.defaultTestLoader.loadTestsFromTestCase(TestBackup)
+    test_suite = RandomTest(test_suite, 10)
+    unittest.TextTestRunner().run(test_suite)
