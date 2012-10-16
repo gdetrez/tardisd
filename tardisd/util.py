@@ -32,6 +32,10 @@ def copytree(src, dst):
     where hardlink are used instead of actually copying the files."""
     names = os.listdir(src)
     os.makedirs(dst)
+    # Copy metadata:
+    shutil.copystat(src, dst)
+    # copystat doesn't care for the owner/group so I wrote a custom function
+    copyown(src,dst)
     errors = []
     for name in names:
         srcname = os.path.join(src, name)
@@ -50,7 +54,12 @@ def copytree(src, dst):
         # continue with other files
         except Exception, err:
             errors.extend(err.args[0])
-    shutil.copystat(src, dst)
     if errors:
         print errors
         assert False
+
+def copyown(src,dst):
+    s = os.stat(src)
+    uid = s.st_uid
+    gid = s.st_gid
+    os.chown(dst,uid,gid)
