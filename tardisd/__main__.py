@@ -71,11 +71,11 @@ if __name__ == "__main__":
             bc = BackupChain(name, source, destination, exclude)
             logging.info("Found %d old backup" % len(bc.history))
             logging.info("Latest backup: %s" % bc.latest_backup())
-            if datetime.now() - bc.latest_backup().when > timedelta(minutes=60):
+            if bc.latest_backup() is None or datetime.now() - bc.latest_backup().when > timedelta(minutes=60):
                 logging.info("Previous bckup more than 60 minutes old, backing up again")
                 if options.dry:
                     bc.dry_run()
                 else:
                     bc.make_backup()
             else:
-                logging.info("Previous bckup less than 60 minutes old, skipping")
+                logging.info("Previous backup less than 60 minutes old, skipping")
