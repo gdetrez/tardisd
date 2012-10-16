@@ -2,6 +2,7 @@ import datetime
 import sys, os, shutil, re
 import dateutil.parser
 import logging
+log = logging.getLogger(__name__)
 import subprocess
 import tempfile
 from .util import rsync, copytree
@@ -63,6 +64,7 @@ class BackupChain:
         return self.history[-1]
 
     def make_backup(self):
+        log.info("Backup started")
         if not os.path.exists(self.partial_backup_path):
             if self.latest_backup() is None:
                 os.mkdir(self.partial_backup_path)
