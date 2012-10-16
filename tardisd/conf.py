@@ -13,7 +13,7 @@ ENVIRONMENT_VARIABLE = "TARDIS_CONFIG_FILE"
 class Settings(object):
 
     HOME = DEFAULT_HOME
-    
+    LOG_DIR = "/var/log/tardisd/"
     
     def __init__(self):        
         """
