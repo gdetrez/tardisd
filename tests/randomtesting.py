@@ -17,7 +17,9 @@ def randdatetime():
     return datetime.datetime.fromtimestamp(random.randrange(2147483648))
 
 def randstring(size):
-    ltrs = [random.choice(string.ascii_letters) for i in range(size)]
+    # TODO: how to include "/" in file names ?
+    # (is it legal in linux file names ?)
+    ltrs = [random.choice(string.printable.replace("/",'')) for i in range(size)]
     return ''.join(ltrs)
 
 def checksum(root, path):
@@ -80,7 +82,7 @@ class DirectoryTree:
         if path is None:
             d = self.random_directory(True)
             path = os.path.join(d, randstring(10) + ".txt")
-        assert path.startswith(self.root)
+        assert path.startswith(self.root), "%s should start with %s" % (path, self.root)
         with open(path, "w") as f:
             f.write(randstring(100) + "\n")
         logging.debug("CREATED FILE: %s" % path)
