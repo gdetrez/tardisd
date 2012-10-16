@@ -73,7 +73,8 @@ class BackupChain:
         b = Backup(self.destination)
         assert not b.iscomplete(), "Backup complete! [%s]" % b.path
         assert os.path.isdir(settings.LOG_DIR)
-        rsync(self.source, self.partial_backup_path, self.exclude, logfile=os.path.join("/var/log/tardisd/rsynclog-%s-%s" % (self.name, b.when.isoformat())))
+        rsync(self.source, self.partial_backup_path, self.exclude,
+              logfile=os.path.join(self.destination,"rsynclog-%s-%s" % (self.name, b.when.isoformat())))
         shutil.move(self.partial_backup_path, b.path)
         self.refresh_history()
         return b
