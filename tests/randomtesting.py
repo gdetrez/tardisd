@@ -233,12 +233,22 @@ class RandomTest(unittest.BaseTestSuite):
 
 
 if __name__ == '__main__':
+    from optparse import OptionParser
+    parser = OptionParser()
+    parser.add_option("-s", "--seed",
+                      help="Set a fixed seed for the random generator", metavar="SEED",
+                      action="store", type=int, dest="seed",
+                      default=int(os.environ.get('SEED', random.randint(0, sys.maxint))))
+    parser.add_option("-n", "--number-of-runs",
+                      help="Run each test N times (default 10)", metavar="N",
+                      action="store", type=int, dest="runs",
+                      default=int(os.environ.get('SEED', random.randint(0, sys.maxint))))
+    (options, args) = parser.parse_args()
 
     logging.basicConfig(level=logging.WARN)
 
-    SEED = int(os.environ.get('SEED', random.randint(0, sys.maxint)))
-    random.seed(SEED)
-    print "SEED:", SEED
+    random.seed(options.seed)
+    print "SEED:", options.seed
     test_suite = unittest.defaultTestLoader.loadTestsFromTestCase(TestBackup)
-    test_suite = RandomTest(test_suite, 10)
+    test_suite = RandomTest(test_suite, options.runs)
     unittest.TextTestRunner().run(test_suite)
