@@ -48,14 +48,14 @@ class BackupChain:
     def refresh_history(self):
         history = []
         for d in os.listdir(self.destination):
-            try:
-                history.append(Backup(self.destination, dateutil.parser.parse(d)))
-            except ValueError:
-                if d == ".part":
-                    logging.info("Found one incomplete backup")
-                else:
-                    logging.warning("Unknown file %s in backup location" % d)
-
+            if os.path.isdir(os.path.join(self.destination, d)):
+                try:
+                    history.append(Backup(self.destination, dateutil.parser.parse(d)))
+                except ValueError:
+                    if d == ".part":
+                        logging.info("Found one incomplete backup")
+                    else:
+                        logging.warning("Unknown directory %s in backup location" % d)
         self.history = sorted(history, key=lambda b: b.when)
 
     def latest_backup(self):
